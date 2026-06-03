@@ -69,6 +69,22 @@ func applySystemPromptIfNeeded(c *gin.Context, info *relaycommon.RelayInfo, requ
 	}
 }
 
+func shouldAwsOpenAIModelUseResponses(info *relaycommon.RelayInfo) bool {
+	if info == nil || info.ChannelType != constant.ChannelTypeAws {
+		return false
+	}
+	return isAwsOpenAIResponsesModelName(info.OriginModelName) || isAwsOpenAIResponsesModelName(info.UpstreamModelName)
+}
+
+func isAwsOpenAIResponsesModelName(modelName string) bool {
+	switch modelName {
+	case "gpt-5.4", "gpt-5.5", "openai.gpt-5.4", "openai.gpt-5.5":
+		return true
+	default:
+		return false
+	}
+}
+
 func chatCompletionsViaResponses(c *gin.Context, info *relaycommon.RelayInfo, adaptor channel.Adaptor, request *dto.GeneralOpenAIRequest) (*dto.Usage, *types.NewAPIError) {
 	chatJSON, err := common.Marshal(request)
 	if err != nil {

@@ -20,6 +20,8 @@ var awsModelIDMap = map[string]string{
 	"claude-opus-4-6":            "anthropic.claude-opus-4-6-v1",
 	"claude-opus-4-7":            "anthropic.claude-opus-4-7",
 	"claude-opus-4-8":            "anthropic.claude-opus-4-8",
+	"gpt-5.4":                    "openai.gpt-5.4",
+	"gpt-5.5":                    "openai.gpt-5.5",
 	// Nova models
 	"nova-micro-v1:0":   "amazon.nova-micro-v1:0",
 	"nova-lite-v1:0":    "amazon.nova-lite-v1:0",
@@ -158,4 +160,12 @@ var ChannelName = "aws"
 // 判断是否为Nova模型
 func isNovaModel(modelId string) bool {
 	return strings.Contains(modelId, "nova-")
+}
+
+func isAwsOpenAIResponsesModel(modelId string) bool {
+	return modelId == "openai.gpt-5.4" || modelId == "openai.gpt-5.5"
+}
+
+func isAwsOpenAIResponsesRequestModel(modelName string) bool {
+	return isAwsOpenAIResponsesModel(getAwsModelID(modelName))
 }
